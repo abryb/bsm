@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">BSM</string>
     <string name="create_password">create password</string>
-    <string name="button_save">save</string>
+    <string name="button_save">Save</string>
     <string name="create_password_label">Password: </string>
+    <string name="invalid_password">Invalid password. Try again.</string>
+    <string name="button_login">Login</string>
+    <string name="button_change_password">Change password</string>
+    <string name="change_password_label">Change password</string>
+    <string name="my_note">My note (pl: moja notatka)</string>
 </resources>
