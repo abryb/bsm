@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.InvalidAlgorithmParameterException;
@@ -18,9 +17,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
-import java.util.Arrays;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -106,7 +103,6 @@ public class AppDataStorage {
                         .setKeySize(256)
                         .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-//                    .setRandomizedEncryptionRequired(true)
                         // TODO
 //                        .setUserAuthenticationRequired(true)
 //                        .setUserAuthenticationValidityDurationSeconds(5 * 60)

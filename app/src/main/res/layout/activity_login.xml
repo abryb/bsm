@@ -14,12 +14,12 @@
         android:ems="10"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        app:layout_constraintBaseline_toBaselineOf="@+id/save_password"
+        app:layout_constraintBaseline_toBaselineOf="@+id/send_password"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/create_password" />
+        tools:text="@string/password" />
 
     <Button
-        android:id="@+id/save_password"
+        android:id="@+id/send_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="112dp"
@@ -38,11 +38,11 @@
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
-        android:text="@string/create_password_label"
+        android:text="@string/login_password_label"
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.341"
-        tools:text="@string/create_password_label" />
+        tools:text="@string/login_password_label" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,6 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.Signature;
-import java.security.UnrecoverableEntryException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.spec.KeySpec;
@@ -63,7 +62,7 @@ public class App extends android.app.Application {
         secureRandom.nextBytes(passwordSalt);
 
         try {
-            byte[] passwordHash = createPasswordHash(password, passwordSalt);
+            byte[] passwordHash   = createPasswordHash(password, passwordSalt);
             PrivateKey privateKey = getAndroidKeyStoreSignKey().getPrivateKey();
             Signature signature = Signature.getInstance("SHA256withRSA");
             signature.initSign(privateKey);
@@ -124,6 +123,9 @@ public class App extends android.app.Application {
 
     public String getNote() throws AppException {
         try {
+            if (appData.getNote() == null) {
+                return "";
+            }
             byte[] decrypted = decryptWithCurrentPasswordHash(appData.getNote());
             return new String(decrypted);
 
@@ -138,27 +140,6 @@ public class App extends android.app.Application {
 
         return (KeyStore.PrivateKeyEntry) ks.getEntry(AKS_SIGN_KEY_ALIAS, null);
     }
-
-//    private byte[] encryptWithAKS(byte[] input) throws AppException {
-//
-//        try {
-//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
-//            cipher.init(Cipher.ENCRYPT_MODE, getAKSSecretKey());
-//            return cipher.doFinal(input);
-//        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
-//            e.printStackTrace();
-//            throw new AppException(e.getMessa//        }
-//    }
-//
-//    private byte[] decryptWithAKS(byte[] input) throws AppException {
-//        try {
-//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
-//            cipher.init(Cipher.DECRYPT_MODE, getAKSSecretKey());
-//            return cipher.doFinal(input);
-//        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
-//            e.printStackTrace();
-//            throw new AppException(e.getMessa//        }
-//    }
 
     private byte[] encryptWithCurrentPasswordHash(byte[] note) throws Exception {
 
@@ -181,17 +162,6 @@ public class App extends android.app.Application {
                 256);
         return factory.generateSecret(keySpec).getEncoded();
     }
-
-    private SecretKey getSecretKey(String password, byte[] salt) throws Exception {
-        SecretKeyFactory factory = SecretKeyFactory
-                .getInstance("PBKDF2WithHmacSHA1");
-        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536,
-                256);
-        SecretKey tmp = factory.generateSecret(keySpec);
-        return new SecretKeySpec(tmp.getEncoded(), "AES");
-    }
-
-
 
     protected void initAndroidKeyStoreKeys() throws AppException {
         try {
