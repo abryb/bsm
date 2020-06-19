@@ -5,19 +5,13 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Log;
 
-import java.io.IOException;
 import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
 import java.security.spec.KeySpec;
 
 import javax.crypto.SecretKey;
@@ -62,7 +56,7 @@ public class App extends android.app.Application {
         secureRandom.nextBytes(passwordSalt);
 
         try {
-            byte[] passwordHash   = createPasswordHash(password, passwordSalt);
+            byte[] passwordHash = createPasswordHash(password, passwordSalt);
             PrivateKey privateKey = getAndroidKeyStoreSignKey().getPrivateKey();
             Signature signature = Signature.getInstance("SHA256withRSA");
             signature.initSign(privateKey);
@@ -173,7 +167,7 @@ public class App extends android.app.Application {
                         AKS_SIGN_KEY_ALIAS,
                         KeyProperties.PURPOSE_SIGN);
                 KeyGenParameterSpec spec = builder
-                        .setCertificateSubject(new X500Principal("CN=$ALIAS_VERIFY_SIGNATURE"))
+                        .setCertificateSubject(new X500Principal("CN=BSM Project"))
                         .setDigests(KeyProperties.DIGEST_SHA256)
                         .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
                         .setCertificateSerialNumber(new BigInteger("1337"))
@@ -189,7 +183,7 @@ public class App extends android.app.Application {
                 Log.d(TAG, "AndroidKeyStore created key " + AKS_SIGN_KEY_ALIAS);
             }
 
-        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new AppException(e);
         }
