@@ -5,7 +5,6 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Log;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
@@ -22,7 +21,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.spec.KeySpec;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -33,8 +31,6 @@ public class App extends android.app.Application {
     private static final String TAG = "Application";
     private static final String AKS_ENCRYPTION_KEY_ALIAS = "key_encryption";
     private static final String AKS_SIGN_KEY_ALIAS = "key_sign";
-    private static final String DATA_FILE = "data.enc";
-
 
     private AppDataStorage appDataStorage;
     private AppData appData;
@@ -46,8 +42,11 @@ public class App extends android.app.Application {
         super.onCreate();
         try {
             initAndroidKeyStoreKeys();
-            appDataStorage = new AppDataStorage(new File(getFilesDir(), DATA_FILE));
+            appDataStorage = new AppDataStorage(getFilesDir());
             appData = appDataStorage.loadData();
+            if (passwordExists() && appData.getNote() == null) {
+                saveNote("");
+            }
         } catch (AppException e) {
             e.printStackTrace();
         }
@@ -192,42 +191,12 @@ public class App extends android.app.Application {
         return new SecretKeySpec(tmp.getEncoded(), "AES");
     }
 
-    private SecretKey getAKSSecretKey() throws AppException {
 
-        initAndroidKeyStoreKeys();
-        try {
-            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
-            ks.load(null);
-            KeyStore.SecretKeyEntry entry = (KeyStore.SecretKeyEntry) ks.getEntry(AKS_ENCRYPTION_KEY_ALIAS, null);
-            return entry.getSecretKey();
-        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException | UnrecoverableEntryException e) {
-            e.printStackTrace();
-            throw new AppException(e);
-        }
-    }
 
     protected void initAndroidKeyStoreKeys() throws AppException {
         try {
             KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
             ks.load(null);
-
-            if (!ks.containsAlias(AKS_ENCRYPTION_KEY_ALIAS)) {
-                KeyGenParameterSpec.Builder builder = new KeyGenParameterSpec.Builder(AKS_ENCRYPTION_KEY_ALIAS,
-                        KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT);
-                KeyGenParameterSpec keySpec = builder
-                        .setKeySize(256)
-                        .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-//                    .setRandomizedEncryptionRequired(true)
-                        // TODO
-//                        .setUserAuthenticationRequired(true)
-//                        .setUserAuthenticationValidityDurationSeconds(5 * 60)
-                        .build();
-                KeyGenerator kg = KeyGenerator.getInstance("AES", "AndroidKeyStore");
-                kg.init(keySpec);
-                kg.generateKey();
-                Log.d(TAG, "AndroidKeyStore created key " + AKS_ENCRYPTION_KEY_ALIAS);
-            }
 
             if (!ks.containsAlias(AKS_SIGN_KEY_ALIAS)) {
                 KeyGenParameterSpec.Builder builder = new KeyGenParameterSpec.Builder(

@@ -21,7 +21,6 @@ public class AppCrypto {
     }
 
     public static byte[] decrypt(SecretKey secret, byte[] input) throws Exception {
-
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
 
         int blockSize = cipher.getBlockSize();

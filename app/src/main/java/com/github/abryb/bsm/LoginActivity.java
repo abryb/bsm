@@ -16,11 +16,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    /**
-     * Called when the user taps the Send button
-     */
     public void login(View view) {
-        EditText editText = (EditText) findViewById(R.id.password);
+        EditText editText = findViewById(R.id.password);
         String password = editText.getText().toString();
 
         try {
@@ -29,8 +26,8 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, NoteActivity.class);
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                editText.setText("");
+                Toast.makeText(this, "Wrong password.", Toast.LENGTH_SHORT).show();
             }
         } catch (AppException e) {
             e.printStackTrace();

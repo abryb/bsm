@@ -20,7 +20,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
      * Called when the user taps the Send button
      */
     public void createPassword(View view) {
-        EditText editText = (EditText) findViewById(R.id.password);
+        EditText editText = findViewById(R.id.password);
         String password = editText.getText().toString();
 
         try {

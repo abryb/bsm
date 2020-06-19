@@ -24,7 +24,7 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     public void saveNote(View view) {
-        EditText editText = (EditText) findViewById(R.id.note);
+        EditText editText = findViewById(R.id.note);
         String note = editText.getText().toString();
 
         try {
