@@ -4,7 +4,6 @@ package com.github.abryb.bsm;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.math.BigInteger;
 import java.security.KeyPairGenerator;
@@ -23,7 +22,6 @@ import javax.security.auth.x500.X500Principal;
 
 public class App extends android.app.Application {
     private static final String TAG = "Application";
-    private static final String AKS_ENCRYPTION_KEY_ALIAS = "key_encryption";
     private static final String AKS_SIGN_KEY_ALIAS = "key_sign";
 
     private AppDataStorage appDataStorage;
