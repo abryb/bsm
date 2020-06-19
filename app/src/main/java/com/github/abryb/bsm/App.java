@@ -4,6 +4,7 @@ package com.github.abryb.bsm;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.math.BigInteger;
 import java.security.KeyPairGenerator;
@@ -50,6 +51,8 @@ public class App extends android.app.Application {
     }
 
     public void setPassword(String password) throws AppException {
+        validatePassword(password);
+
         SecureRandom secureRandom = new SecureRandom();
 
         byte[] passwordSalt = new byte[16];
@@ -99,6 +102,8 @@ public class App extends android.app.Application {
             String note = getNote();
             setPassword(newPassword);
             saveNote(note);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(e);
         }
@@ -125,6 +130,18 @@ public class App extends android.app.Application {
 
         } catch (Exception e) {
             throw new AppException(e);
+        }
+    }
+
+    private void validatePassword(String password) throws InsufficientPasswordException {
+        if (BuildConfig.DEBUG) {
+            if (password.length() < 3) {
+                throw new InsufficientPasswordException("Even in debug password should be 3 or more characters..");
+            }
+        } else {
+            if (password.length() < 10) {
+                throw new InsufficientPasswordException("Password should be at least 10 characters.");
+            }
         }
     }
 

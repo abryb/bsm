@@ -20,6 +20,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         EditText editText = findViewById(R.id.password);
         String password = editText.getText().toString();
 
+
         try {
             App app = (App) getApplicationContext();
             app.changePassword(password);
@@ -27,6 +28,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
             Intent intent = new Intent(this, NoteActivity.class);
             startActivity(intent);
 
+        } catch (InsufficientPasswordException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            editText.setText("");
         } catch (AppException e) {
             e.printStackTrace();
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();

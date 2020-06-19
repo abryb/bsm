@@ -29,9 +29,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
             Intent intent = new Intent(this, NoteActivity.class);
             startActivity(intent);
 
+        } catch (InsufficientPasswordException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            editText.setText("");
         } catch (AppException e) {
             e.printStackTrace();
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }
